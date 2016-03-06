@@ -1,7 +1,8 @@
-const tape = require("tape")
+var tape = require('tape');
+var assign = require('object-assign');
 
-export default function () {
+module.exports = function () {
   this.tape = function (options) {
-    console.log( tape )
-  }
-}
+
+  };
+};
