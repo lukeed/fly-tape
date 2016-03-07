@@ -1,8 +1,11 @@
+var path = require('path');
 var tape = require('tape');
 var assign = require('object-assign');
 
 module.exports = function () {
-  this.tape = function (opts) {
+  var self = this;
+
+  self.tape = function (opts) {
     opts = assign({
       stream: process.stdout,
       reporter: require('tap-spec'),
@@ -10,8 +13,14 @@ module.exports = function () {
     }, opts);
 
     var instance = tape.createStream(opts.options);
-    instance.pipe(opts.reporter).pipe(opts.stream);
+    instance.pipe(opts.reporter()).pipe(opts.stream);
 
-    console.log(instance);
+    return self.unwrap(function (files) {
+      files.forEach(function (f) {
+        require(path.resolve(f));
+      });
+
+      return instance;
+    });
   };
 };
